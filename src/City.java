@@ -11,10 +11,6 @@ public class City implements Serializable {
 
     @Override
     public String toString() {
-        return "City{" +
-                "Name='" + Name + '\'' +
-                ", ZIP='" + ZIP + '\'' +
-                ", Province='" + Province + '\'' +
-                '}';
+        return Name + "(" + Province + "), " + ZIP;
     }
 }

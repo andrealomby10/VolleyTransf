@@ -8,7 +8,7 @@ import java.util.*;
 
 public class ClientManager implements Runnable{
     private Socket client_socket;
-    HashMap<String,User> list;
+    UserHashMap list;
 
     @Override
     public void run() {
@@ -35,13 +35,11 @@ public class ClientManager implements Runnable{
                         switch (message){
                             case "Athlete":
                                 Athlete newath = (Athlete) client_scanner.readObject();
-                                list.put(newath.getUsername(),newath);
-                                pw.writeObject(Protocol.REGISTER_SUCCESS);
+                                pw.writeObject(list.put(newath));
                                 break;
                             case "Manager":
                                 Manager newman = (Manager) client_scanner.readObject();
-                                list.put(newman.getUsername(),newman);
-                                pw.writeObject(Protocol.REGISTER_SUCCESS);
+                                pw.writeObject(list.put(newman));
                                 break;
                         }
                         System.out.println(list.toString());
@@ -69,8 +67,7 @@ public class ClientManager implements Runnable{
                         break;
                     case Protocol.USER_UPDATE:
                         User tmp = (User) client_scanner.readObject();
-                        list.remove(tmp.getUsername());
-                        list.put(tmp.getUsername(),tmp);
+                        list.update(tmp);
                         break;
                     case Protocol.ROLE_SEARCH:
                         char rolegender = (char) client_scanner.readObject();
@@ -114,7 +111,7 @@ public class ClientManager implements Runnable{
                     }
         }
 
-    public ClientManager(Socket myclient,HashMap<String,User> list) {
+    public ClientManager(Socket myclient,UserHashMap list) {
         client_socket = myclient;
         this.list = list;
     }

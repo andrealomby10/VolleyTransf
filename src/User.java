@@ -3,8 +3,10 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public abstract class User implements Serializable{
 private String Name,Surname,Username,Email, PhoneNumber;
@@ -126,15 +128,8 @@ private Boolean Active;
 
     @Override
     public String toString() {
-        return  "Name='" + Name + '\'' +
-                ", Surname='" + Surname + '\'' +
-                ", Username='" + Username + '\'' +
-                ", Email='" + Email + '\'' +
-                ", PhoneNumber='" + PhoneNumber + '\'' +
-                ", " + Location.toString() +
-                ", LastEdit=" + LastEdit +
-                ", RegistrationDate=" + RegistrationDate +
-                ", Birthdate=" + Birthdate;
+        return  Username+": "+Surname + " " + Name + ", "+Gender+", "+Birthdate+"\nLocated in: "+Location.toString()+"\nContacts:\nEmail: "+Email+"\nPhone: "+PhoneNumber +
+                "\nUser since: "+RegistrationDate +"\nLast Profile Edit: "+LastEdit;
     }
 
 }

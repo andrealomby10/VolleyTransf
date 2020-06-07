@@ -1,7 +1,12 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 
 public class Server {
@@ -17,23 +22,28 @@ public class Server {
     private ServerSocket socket;
     private Socket client_socket;
     private int port;
+    private int backup_seconds;
     int client_id = 0;
-    HashMap<String,User> list = new HashMap<>();
+    UserHashMap list = new UserHashMap();
+
 
     public static void main(String args[]){
-        Server server = new Server(1107);
+        Server server = null;
+        try {
+            server = new Server(1107,60);
+        } catch (IOException e) { e.printStackTrace(); }
+        catch (ClassNotFoundException e) { e.printStackTrace(); }
         server.start();
     }
 
-    public Server(int port){
+    public Server(int port,int backupsec) throws IOException, ClassNotFoundException {
         System.out.println("Initializing server with port "+port);
         this.port = port;
-        list.put(Andrea.getUsername(),Andrea);
-        list.put(Saro.getUsername(),Saro);
-        list.put(Davide.getUsername(),Davide);
-        list.put(Simone.getUsername(),Simone);
-
-
+        this.backup_seconds=backupsec;
+        list.put(Andrea);
+        list.put(Saro);
+        list.put(Davide);
+        list.put(Simone);
     }
 
     public void start() {
@@ -41,6 +51,23 @@ public class Server {
             System.out.println("Starting server on port "+port);
             socket = new ServerSocket(port);
             System.out.println("Started server on port "+port);
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        while(true) {
+                            Thread.sleep((backup_seconds * 1000));
+                            list.Save();
+                            Date now=new Date();
+                            SimpleDateFormat dateformat =  new SimpleDateFormat ("dd MMMM yyyy - HH:mm.ss");
+                            System.out.println("User List Saved: "+ dateformat.format(now));
+                        }
+                    } catch (InterruptedException | IOException e) { e.printStackTrace(); }
+
+                }
+            }).start();
+
             while (true) {
                 System.out.println("Listening on port " + port);
                 client_socket = socket.accept();
@@ -50,6 +77,8 @@ public class Server {
                 Thread t = new Thread(cm,"client_"+client_id);
                 client_id++;
                 t.start();
+
+
             }
 
         } catch (IOException e) {

@@ -15,7 +15,7 @@ public class Client {
     private int port;
     
     public static void main(String args[]){
-        Client user = new Client("127.0.0.1",1107);
+        Client user = new Client("whitelodge.ns0.it",1107);
         user.Connect();
         user.Welcome();
     }
@@ -150,19 +150,39 @@ public class Client {
                 break;
         }
         String response=null;
-        try {
-            pw.writeObject(Protocol.REGISTER);
-            pw.writeObject(tmp.getClass().getName());
-            pw.writeObject(tmp);
-            response  = (String) server_stream.readObject();
-            switch (response){
-                case Protocol.REGISTER_SUCCESS:
-                    System.out.println("Successfully Registered! Login to start using VolleyTransfer!");
-                    break;
-                case Protocol.REGISTER_ERROR:
-                    System.out.println("Something went wrong! Try Again Later Please!");
-            }
-        } catch (IOException | ClassNotFoundException e) {e.printStackTrace();}
+        do{
+            try {
+                pw.writeObject(Protocol.REGISTER);
+                pw.writeObject(tmp.getClass().getName());
+                pw.writeObject(tmp);
+                response  = (String) server_stream.readObject();
+                switch (response){
+                    case Protocol.REGISTER_SUCCESS:
+                        System.out.println("Successfully Registered! Login to start using VolleyTransfer!");
+                        break;
+                    case Protocol.ALREADYUSEDUSERNAME:
+                        System.out.println("Ops! Looks like someone stole your username! Insert another one:");
+                        String newuser = user_scanner.nextLine();
+                        try {
+                            pw.writeObject(Protocol.CHECK_USERNAME);
+                            pw.writeObject(newuser);
+                            String check = (String) server_stream.readObject();
+                            while(check.equals(Protocol.ALREADYUSEDUSERNAME)){
+                                System.out.println("Username already in use, choose another one: ");
+                                newuser = user_scanner.nextLine();
+                                pw.writeObject(Protocol.CHECK_USERNAME);
+                                pw.writeObject(newuser);
+                                check = (String) server_stream.readObject();}
+                        } catch (IOException | ClassNotFoundException e) {e.printStackTrace();}
+                        tmp.setUsername(newuser);
+                        break;
+                    case Protocol.REGISTER_ERROR:
+                        System.out.println("Something went wrong! Try Again Later Please!");
+                        break;
+                }
+            } catch (IOException | ClassNotFoundException e) {e.printStackTrace();}
+        }while(response.equals(Protocol.ALREADYUSEDUSERNAME));
+
     }
 
     private User Login() throws UnsupportedEncodingException, NoSuchAlgorithmException {
@@ -285,9 +305,9 @@ public class Client {
             System.out.println( "1) Modifica Password\n" +
                                 "2) Modifica Residenza\n" +
                                 "3) Modifica Contatti");
-            if(user.getClass().getName().equals("Athlete")) System.out.println("4) Modifica disponibilità al trasferimento");
+            if(user.getClass().getName().equals("Athlete")) System.out.println("4) Modifica disponibilità al trasferimento\n5) Modifica Ruolo Preferito");
             else System.out.println("4) Modifica squadra rappresentata");
-            System.out.println( "5) Indietro\n" +
+            System.out.println( "6) Indietro\n" +
                                 "Scegli: ");
             int choose = user_scanner.nextInt();
             user_scanner.nextLine();
@@ -369,6 +389,23 @@ public class Client {
                     }
                     break;
                 case 5:
+                    switch (user.getClass().getName()){
+                        case "Athlete":
+                            System.out.println("Inserisci il nuovo ruolo: ");
+                            String role = user_scanner.nextLine();
+                            while(!Protocol.AdmittedRoles.contains(role)){
+                                System.out.println("Admitted Roles: "+Protocol.AdmittedRoles.toString());
+                                System.out.println("Insert your new Role:");
+                                role = user_scanner.nextLine();
+                            }
+                            ((Athlete) user).setRole(role);
+                            break;
+                        case "Manager":
+                            System.out.println("Comando inserito non esistente!");
+                            break;
+                    }
+                    break;
+                case 6:
                     return;
                 default:
                     System.out.println("Comando inserito non esistente!");

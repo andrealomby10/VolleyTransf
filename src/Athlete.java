@@ -25,6 +25,7 @@ public class Athlete extends User{
     }
 
     public String getRole() { return FavouriteRole; }
+    public void setRole(String role) { this.FavouriteRole = role; this.UpdateLastEdit(); }
 
     public boolean isLoockingforTeam() {
         return LoockingforTeam;
@@ -56,6 +57,8 @@ public class Athlete extends User{
 
     @Override
     public String toString() {
-        return "Athlete{" + super.toString() +"}";
+        return super.toString()+"\nFavourite Role: "+FavouriteRole;
     }
+
+
 }

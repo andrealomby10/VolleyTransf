@@ -10,7 +10,7 @@ public class Manager extends User{
 
     @Override
     public String toString() {
-        return "Manager{" + super.toString() +", Team='" + Teamname + "\'}";
+        return super.toString() +"\nReferent for: " + Teamname;
     }
 
     public String getTeamname() { return Teamname; }
