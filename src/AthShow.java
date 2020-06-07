@@ -25,7 +25,7 @@ public class AthShow implements Serializable {
 
     @Override
     public String toString() {
-        String show = Surname + " " + Name + ", " + Role + ", "+Age+","+City+"("+Province+"), Contacts: Email:"+email+" Number:"+phone+"\n" +
+        String show = Surname + " " + Name + ", " + Role + ", "+Age+", "+City+"("+Province+"), Contacts: Email:"+email+" Number:"+phone+"\n" +
                 "Recent Seasons:\n";
         int i = 0;
         while (i < 3 && i<Curriculum.size()){
