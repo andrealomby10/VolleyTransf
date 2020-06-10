@@ -1,30 +1,17 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.HashMap;
+
 
 public class Server {
-    public static final Athlete Andrea = new Athlete("Andrea","Lombardo",'M',"andrealomby10","pass","lomby@gmail.com","3489875451","Fiumefreddo di Sicilia",
-            "95013","CT", LocalDate.of(1994,06,30),"Palleggiatore");
-    public static final Athlete Davide = new Athlete("Davide","Lombardo",'M',"davidelomby7","pass","lomby@gmail.com","3489875451","Fiumefreddo di Sicilia",
-            "95013","CT", LocalDate.of(1999,02,26),"Palleggiatore");
-    public static final Athlete Simone = new Athlete("Simone","Lombardo",'M',"simonelomby13","pass","lomby@gmail.com","3489875451","Fiumefreddo di Sicilia",
-            "95013","CT", LocalDate.of(1995,06,06),"Libero");
-    public static final Manager Saro = new Manager("Saro","Pomecio",'M',"saropom","pass","lomby@gmail.com","3489875451","Fiumefreddo di Sicilia",
-            "95013","CT", LocalDate.now(),"ASD Papiro Volley");
-
     private ServerSocket socket;
     private Socket client_socket;
     private int port;
     private int backup_seconds;
     int client_id = 0;
-    UserHashMap list = new UserHashMap();
+    private UserHashMap list = new UserHashMap();
 
 
     public static void main(String args[]){
@@ -40,10 +27,6 @@ public class Server {
         System.out.println("Initializing server with port "+port);
         this.port = port;
         this.backup_seconds=backupsec;
-        list.put(Andrea);
-        list.put(Saro);
-        list.put(Davide);
-        list.put(Simone);
     }
 
     public void start() {

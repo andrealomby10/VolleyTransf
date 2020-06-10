@@ -3,10 +3,9 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
+
 
 public abstract class User implements Serializable{
 private String Name,Surname,Username,Email, PhoneNumber;

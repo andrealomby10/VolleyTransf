@@ -1,8 +1,6 @@
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 
 public class AthShow implements Serializable {
     private final String Username;
@@ -32,7 +30,7 @@ public class AthShow implements Serializable {
             show += Curriculum.get(i).toString()+"\n";
             i++;
         }
-        if (i==0) show+="Not Avaibles";
+        if (i==0) show+="Not Avaibles\n";
 
         return show;
     }
