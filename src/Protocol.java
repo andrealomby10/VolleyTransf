@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.List;
 
-public class Protocol {
+public abstract class Protocol {
     public static final String REGISTER = "ADDNEWUSR";
     public static final String ALREADYUSEDUSERNAME = "USERNOTAVB";
     public static final String CHECK_USERNAME = "USRCK";
